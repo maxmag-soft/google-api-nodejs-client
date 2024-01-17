@@ -413,6 +413,16 @@ export namespace chat_v1 {
     userLocale?: string | null;
   }
   /**
+   * Request message for completing the import process for a space.
+   */
+  export interface Schema$CompleteImportSpaceRequest {}
+  export interface Schema$CompleteImportSpaceResponse {
+    /**
+     * The import mode space.
+     */
+    space?: Schema$Space;
+  }
+  /**
    * Represents a custom emoji.
    */
   export interface Schema$CustomEmoji {
@@ -714,7 +724,7 @@ export namespace chat_v1 {
     sections?: Schema$GoogleAppsCardV1Section[];
   }
   /**
-   * A card action is the action associated with the card. For example, an invoice card might include actions such as delete invoice, email invoice, or open the invoice in a browser. Not supported by Chat apps.
+   * A card action is the action associated with the card. For example, an invoice card might include actions such as delete invoice, email invoice, or open the invoice in a browser. [Google Workspace Add-ons](https://developers.google.com/workspace/add-ons):
    */
   export interface Schema$GoogleAppsCardV1CardAction {
     /**
@@ -727,7 +737,7 @@ export namespace chat_v1 {
     onClick?: Schema$GoogleAppsCardV1OnClick;
   }
   /**
-   * A persistent (sticky) footer that that appears at the bottom of the card. For an example in Google Chat apps, see [Card footer](https://developers.google.com/chat/ui/widgets/card-fixed-footer). Setting `fixedFooter` without specifying a `primaryButton` or a `secondaryButton` causes an error. Supported by Google Workspace Add-ons and Chat apps. For Chat apps, you can use fixed footers in [dialogs](https://developers.google.com/chat/how-tos/dialogs), but not [card messages](https://developers.google.com/chat/api/guides/v1/messages/create#create).
+   * A persistent (sticky) footer that that appears at the bottom of the card. For an example in Google Chat apps, see [Card footer](https://developers.google.com/chat/ui/widgets/card-fixed-footer). Setting `fixedFooter` without specifying a `primaryButton` or a `secondaryButton` causes an error. [Google Workspace Add-ons and Chat apps](https://developers.google.com/workspace/extend): For Chat apps, you can use fixed footers in [dialogs](https://developers.google.com/chat/how-tos/dialogs), but not [card messages](https://developers.google.com/chat/api/guides/v1/messages/create#create).
    */
   export interface Schema$GoogleAppsCardV1CardFixedFooter {
     /**
@@ -1204,7 +1214,7 @@ export namespace chat_v1 {
      */
     onChangeAction?: Schema$GoogleAppsCardV1Action;
     /**
-     * Text that appears in the text input field when the field is empty. Use this text to prompt users to enter a value. For example, `Enter a number from 0 to 100`. Supported by Google Chat apps, but not Google Workspace Add-ons.
+     * Text that appears in the text input field when the field is empty. Use this text to prompt users to enter a value. For example, `Enter a number from 0 to 100`. [Google Chat apps](https://developers.google.com/chat):
      */
     placeholderText?: string | null;
     /**
@@ -1484,9 +1494,13 @@ export namespace chat_v1 {
    */
   export interface Schema$Membership {
     /**
-     * Optional. Immutable. The creation time of the membership, such as when a member joined or was invited to join a space. [Developer Preview](https://developers.google.com/workspace/preview): This field is output only, except when used to import historical memberships in import mode spaces.
+     * Optional. Immutable. The creation time of the membership, such as when a member joined or was invited to join a space. This field is output only, except when used to import historical memberships in import mode spaces.
      */
     createTime?: string | null;
+    /**
+     * Optional. Immutable. The deletion time of the membership, such as when a member left or was removed from a space. This field is output only, except when used to import historical memberships in import mode spaces.
+     */
+    deleteTime?: string | null;
     /**
      * The Google Group the membership corresponds to. Only supports read operations. Other operations, like creating or updating a membership, aren't currently supported.
      */
@@ -1545,7 +1559,7 @@ export namespace chat_v1 {
      */
     clientAssignedMessageId?: string | null;
     /**
-     * For spaces created in Chat, the time at which the message was created. This field is output only, except when used in imported spaces. [Developer Preview](https://developers.google.com/workspace/preview): For imported spaces, set this field to the historical timestamp at which the message was created in the source in order to preserve the original creation time.
+     * Optional. Immutable. For spaces created in Chat, the time at which the message was created. This field is output only, except when used in import mode spaces. For import mode spaces, set this field to the historical timestamp at which the message was created in the source in order to preserve the original creation time.
      */
     createTime?: string | null;
     /**
@@ -1744,6 +1758,10 @@ export namespace chat_v1 {
      */
     adminInstalled?: boolean | null;
     /**
+     * Optional. Immutable. For spaces created in Chat, the time the space was created. This field is output only, except when used in import mode spaces. For import mode spaces, set this field to the historical timestamp at which the space was created in the source in order to preserve the original creation time. Only populated in the output when `spaceType` is `GROUP_CHAT` or `SPACE`.
+     */
+    createTime?: string | null;
+    /**
      * The space's display name. Required when [creating a space](https://developers.google.com/chat/api/reference/rest/v1/spaces/create). If you receive the error message `ALREADY_EXISTS` when creating a space or updating the `displayName`, try a different `displayName`. An existing space within the Google Workspace organization might already use this display name. For direct messages, this field might be empty. Supports up to 128 characters.
      */
     displayName?: string | null;
@@ -1751,6 +1769,10 @@ export namespace chat_v1 {
      * Immutable. Whether this space permits any Google Chat user as a member. Input when creating a space in a Google Workspace organization. Omit this field when creating spaces in the following conditions: * The authenticated user uses a Google Account. By default, the space permits any Google Chat user. * The space is used to [import data to Google Chat] (https://developers.google.com/chat/api/guides/import-data-overview). Import mode spaces must only permit members from the same Google Workspace organization. For existing spaces, this field is output only.
      */
     externalUserAllowed?: boolean | null;
+    /**
+     * Optional. Whether this space is created in `Import Mode` as part of a data migration into Google Workspace. While spaces are being imported, they aren't visible to users until the import is complete.
+     */
+    importMode?: boolean | null;
     /**
      * Resource name of the space. Format: `spaces/{space\}`
      */
@@ -2206,6 +2228,100 @@ export namespace chat_v1 {
       this.context = context;
       this.members = new Resource$Spaces$Members(this.context);
       this.messages = new Resource$Spaces$Messages(this.context);
+    }
+
+    /**
+     * Completes the [import process](https://developers.google.com/chat/api/guides/import-data) for the specified space and makes it visible to users. Requires app authentication and domain-wide delegation. For more information, see [Authorize Google Chat apps to import data](https://developers.google.com/chat/api/guides/authorize-import).
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    completeImport(
+      params: Params$Resource$Spaces$Completeimport,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    completeImport(
+      params?: Params$Resource$Spaces$Completeimport,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$CompleteImportSpaceResponse>;
+    completeImport(
+      params: Params$Resource$Spaces$Completeimport,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    completeImport(
+      params: Params$Resource$Spaces$Completeimport,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$CompleteImportSpaceResponse>,
+      callback: BodyResponseCallback<Schema$CompleteImportSpaceResponse>
+    ): void;
+    completeImport(
+      params: Params$Resource$Spaces$Completeimport,
+      callback: BodyResponseCallback<Schema$CompleteImportSpaceResponse>
+    ): void;
+    completeImport(
+      callback: BodyResponseCallback<Schema$CompleteImportSpaceResponse>
+    ): void;
+    completeImport(
+      paramsOrCallback?:
+        | Params$Resource$Spaces$Completeimport
+        | BodyResponseCallback<Schema$CompleteImportSpaceResponse>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$CompleteImportSpaceResponse>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$CompleteImportSpaceResponse>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$CompleteImportSpaceResponse>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Spaces$Completeimport;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params = {} as Params$Resource$Spaces$Completeimport;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl = options.rootUrl || 'https://chat.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (rootUrl + '/v1/{+name}:completeImport').replace(
+              /([^:]\/)\/+/g,
+              '$1'
+            ),
+            method: 'POST',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['name'],
+        pathParams: ['name'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$CompleteImportSpaceResponse>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$CompleteImportSpaceResponse>(parameters);
+      }
     }
 
     /**
@@ -2797,6 +2913,18 @@ export namespace chat_v1 {
     }
   }
 
+  export interface Params$Resource$Spaces$Completeimport
+    extends StandardParameters {
+    /**
+     * Required. Resource name of the import mode space. Format: `spaces/{space\}`
+     */
+    name?: string;
+
+    /**
+     * Request body metadata
+     */
+    requestBody?: Schema$CompleteImportSpaceRequest;
+  }
   export interface Params$Resource$Spaces$Create extends StandardParameters {
     /**
      * Optional. A unique identifier for this request. A random UUID is recommended. Specifying an existing request ID returns the space created with that ID instead of creating a new space. Specifying an existing request ID from the same Chat app with a different authenticated user returns an error.
