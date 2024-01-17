@@ -2008,7 +2008,7 @@ export namespace migrationcenter_v1alpha1 {
    */
   export interface Schema$ReportSummary {
     /**
-     * Aggregate statistics for all the assets across all the groups.
+     * Aggregate statistics for unique assets across all the groups.
      */
     allAssetsStats?: Schema$ReportSummaryAssetAggregateStats;
     /**
@@ -2041,7 +2041,7 @@ export namespace migrationcenter_v1alpha1 {
      */
     memoryUtilizationChart?: Schema$ReportSummaryUtilizationChartData;
     /**
-     * Count of assets grouped by Operating System families.
+     * Count of assets grouped by Operating System families. Only present for virtual machines.
      */
     operatingSystem?: Schema$ReportSummaryChartData;
     /**
@@ -2104,11 +2104,11 @@ export namespace migrationcenter_v1alpha1 {
      */
     assetAggregateStats?: Schema$ReportSummaryAssetAggregateStats;
     /**
-     * Description for the Group.
+     * Description for this group finding.
      */
     description?: string | null;
     /**
-     * Display Name for the Group.
+     * Display Name for this group finding.
      */
     displayName?: string | null;
     /**
@@ -2133,7 +2133,7 @@ export namespace migrationcenter_v1alpha1 {
      */
     displayName?: string | null;
     /**
-     * A set of findings that applies to all machines in the input.
+     * Output only. A set of findings that applies to all virtual machines in the input. Only present for virtual machines.
      */
     machineFinding?: Schema$ReportSummaryMachineFinding;
     /**
@@ -2145,11 +2145,11 @@ export namespace migrationcenter_v1alpha1 {
      */
     monthlyCostCompute?: Schema$Money;
     /**
-     * Network Egress monthly cost for this preference set.
+     * Network Egress monthly cost for this preference set. Only present for virtual machines.
      */
     monthlyCostNetworkEgress?: Schema$Money;
     /**
-     * Licensing monthly cost for this preference set.
+     * Operating system licensing monthly cost for this preference set. Only present for virtual machines.
      */
     monthlyCostOsLicense?: Schema$Money;
     /**
@@ -2173,7 +2173,7 @@ export namespace migrationcenter_v1alpha1 {
      */
     pricingTrack?: string | null;
     /**
-     * A set of findings that applies to Stole-Tenant machines in the input.
+     * A set of findings that applies to Stole-Tenant machines in the input. Only present for virtual machines.
      */
     soleTenantFinding?: Schema$ReportSummarySoleTenantFinding;
     /**
@@ -2181,7 +2181,7 @@ export namespace migrationcenter_v1alpha1 {
      */
     topPriority?: string | null;
     /**
-     * A set of findings that applies to VMWare machines in the input.
+     * A set of findings that applies to VMWare machines in the input. Only present for virtual machines.
      */
     vmwareEngineFinding?: Schema$ReportSummaryVMWareEngineFinding;
   }
