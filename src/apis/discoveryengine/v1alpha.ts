@@ -251,7 +251,7 @@ export namespace discoveryengine_v1alpha {
     token?: string | null;
   }
   /**
-   * Metadata related to the progress of the SiteSearchEngineService.BatchCreateTargetSite operation. This will be returned by the google.longrunning.Operation.metadata field.
+   * Metadata related to the progress of the SiteSearchEngineService.BatchCreateTargetSites operation. This will be returned by the google.longrunning.Operation.metadata field.
    */
   export interface Schema$GoogleCloudDiscoveryengineV1alphaBatchCreateTargetSiteMetadata {
     /**
@@ -264,7 +264,7 @@ export namespace discoveryengine_v1alpha {
     updateTime?: string | null;
   }
   /**
-   * Request message for SiteSearchEngineService.s method.
+   * Request message for SiteSearchEngineService.BatchCreateTargetSites method.
    */
   export interface Schema$GoogleCloudDiscoveryengineV1alphaBatchCreateTargetSitesRequest {
     /**
@@ -729,7 +729,7 @@ export namespace discoveryengine_v1alpha {
      */
     rawBytes?: string | null;
     /**
-     * The URI of the content. Only Cloud Storage URIs (e.g. `gs://bucket-name/path/to/file`) are supported. The maximum file size is 100 MB.
+     * The URI of the content. Only Cloud Storage URIs (e.g. `gs://bucket-name/path/to/file`) are supported. The maximum file size is 2.5 MB for text-based formats, 100 MB for other formats.
      */
     uri?: string | null;
   }
@@ -871,7 +871,7 @@ export namespace discoveryengine_v1alpha {
      */
     agentCreationConfig?: Schema$GoogleCloudDiscoveryengineV1alphaEngineChatEngineConfigAgentCreationConfig;
     /**
-     * The resource name of an exist Dialogflow agent to link to this Chat Engine. Customers can either provide `agent_creation_config` to create agent or provide an agent name that links the agent with the Chat engine. Format: `projects//locations//agents/`. Note that the `dialogflow_agent_to_link` are one-time consumed by and passed to Dialogflow service. It means they cannot be retrieved using EngineService.GetEngine or EngineService.ListEngines API after engine creation. Please use chat_engine_metadata.dialogflow_agent for actual agent association after Engine is created.
+     * The resource name of an exist Dialogflow agent to link to this Chat Engine. Customers can either provide `agent_creation_config` to create agent or provide an agent name that links the agent with the Chat engine. Format: `projects//locations//agents/`. Note that the `dialogflow_agent_to_link` are one-time consumed by and passed to Dialogflow service. It means they cannot be retrieved using EngineService.GetEngine or EngineService.ListEngines API after engine creation. Please use ChatEngineMetadata.dialogflow_agent for actual agent association after Engine is created.
      */
     dialogflowAgentToLink?: string | null;
   }
@@ -887,6 +887,10 @@ export namespace discoveryengine_v1alpha {
      * Required. The default language of the agent as a language tag. See [Language Support](https://cloud.google.com/dialogflow/docs/reference/language) for a list of the currently supported language codes.
      */
     defaultLanguageCode?: string | null;
+    /**
+     * Agent location for Agent creation, supported values: global/us/eu. If not provided, us Engine will create Agent using us-central-1 by default; eu Engine will create Agent using eu-west-1 by default.
+     */
+    location?: string | null;
     /**
      * Required. The time zone of the agent from the [time zone database](https://www.iana.org/time-zones), e.g., America/New_York, Europe/Paris.
      */
@@ -1005,7 +1009,7 @@ export namespace discoveryengine_v1alpha {
     websiteDataSource?: Schema$GoogleCloudDiscoveryengineV1alphaEstimateDataSizeRequestWebsiteDataSource;
   }
   /**
-   * Data source contains files either in GCS or BigQuery.
+   * Data source contains files either in Cloud Storage or BigQuery.
    */
   export interface Schema$GoogleCloudDiscoveryengineV1alphaEstimateDataSizeRequestFileDataSource {
     /**
@@ -1211,6 +1215,58 @@ export namespace discoveryengine_v1alpha {
      * Cloud Storage prefix for import errors. This must be an empty, existing Cloud Storage directory. Import errors are written to sharded files in this directory, one per line, as a JSON-encoded `google.rpc.Status` message.
      */
     gcsPrefix?: string | null;
+  }
+  /**
+   * Metadata related to the progress of the ImportSuggestionDenyListEntries operation. This is returned by the google.longrunning.Operation.metadata field.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaImportSuggestionDenyListEntriesMetadata {
+    /**
+     * Operation create time.
+     */
+    createTime?: string | null;
+    /**
+     * Operation last update time. If the operation is done, this is also the finish time.
+     */
+    updateTime?: string | null;
+  }
+  /**
+   * Request message for CompletionService.ImportSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaImportSuggestionDenyListEntriesRequest {
+    /**
+     * Cloud Storage location for the input content. Only 1 file can be specified that contains all entries to import. Supported values `gcs_source.schema` for autocomplete suggestion deny list entry imports: * `suggestion_deny_list` (default): One JSON [SuggestionDenyListEntry] per line.
+     */
+    gcsSource?: Schema$GoogleCloudDiscoveryengineV1alphaGcsSource;
+    /**
+     * The Inline source for the input content for suggestion deny list entries.
+     */
+    inlineSource?: Schema$GoogleCloudDiscoveryengineV1alphaImportSuggestionDenyListEntriesRequestInlineSource;
+  }
+  /**
+   * The inline source for SuggestionDenyListEntry.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaImportSuggestionDenyListEntriesRequestInlineSource {
+    /**
+     * Required. A list of all denylist entries to import. Max of 1000 items.
+     */
+    entries?: Schema$GoogleCloudDiscoveryengineV1alphaSuggestionDenyListEntry[];
+  }
+  /**
+   * Response message for CompletionService.ImportSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaImportSuggestionDenyListEntriesResponse {
+    /**
+     * A sample of errors encountered while processing the request.
+     */
+    errorSamples?: Schema$GoogleRpcStatus[];
+    /**
+     * Count of deny list entries that failed to be imported.
+     */
+    failedEntriesCount?: string | null;
+    /**
+     * Count of deny list entries successfully imported.
+     */
+    importedEntriesCount?: string | null;
   }
   /**
    * Metadata related to the progress of the Import operation. This is returned by the google.longrunning.Operation.metadata field.
@@ -1423,7 +1479,7 @@ export namespace discoveryengine_v1alpha {
    */
   export interface Schema$GoogleCloudDiscoveryengineV1alphaOcrConfig {
     /**
-     * Required. If OCR is enabled or not. OCR must be enabled for other OcrConfig options to apply.
+     * Required. If OCR is enabled or not. OCR must be enabled for other OcrConfig options to apply. We will only perform OCR on the first 80 pages of the PDF files.
      */
     enabled?: boolean | null;
     /**
@@ -1527,6 +1583,36 @@ export namespace discoveryengine_v1alpha {
      * A sample of document names that will be deleted. Only populated if `force` is set to false. A max of 100 names will be returned and the names are chosen at random.
      */
     purgeSample?: string[] | null;
+  }
+  /**
+   * Metadata related to the progress of the PurgeSuggestionDenyListEntries operation. This is returned by the google.longrunning.Operation.metadata field.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaPurgeSuggestionDenyListEntriesMetadata {
+    /**
+     * Operation create time.
+     */
+    createTime?: string | null;
+    /**
+     * Operation last update time. If the operation is done, this is also the finish time.
+     */
+    updateTime?: string | null;
+  }
+  /**
+   * Request message for CompletionService.PurgeSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaPurgeSuggestionDenyListEntriesRequest {}
+  /**
+   * Response message for CompletionService.PurgeSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaPurgeSuggestionDenyListEntriesResponse {
+    /**
+     * A sample of errors encountered while processing the request.
+     */
+    errorSamples?: Schema$GoogleRpcStatus[];
+    /**
+     * Number of suggestion deny list entries purged.
+     */
+    purgeCount?: string | null;
   }
   /**
    * Metadata related to the progress of the PurgeUserEvents operation. This will be returned by the google.longrunning.Operation.metadata field.
@@ -1820,7 +1906,7 @@ export namespace discoveryengine_v1alpha {
      */
     contentSearchSpec?: Schema$GoogleCloudDiscoveryengineV1alphaSearchRequestContentSearchSpec;
     /**
-     * Uses the provided embedding to do additional semantic document retrieval. The retrieval is based on the dot product of SearchRequest.embedding_spec.embedding_vectors.vector and the document embedding that is provided in SearchRequest.embedding_spec.embedding_vectors.field_path. If SearchRequest.embedding_spec.embedding_vectors.field_path is not provided, it will use ServingConfig.embedding_config.field_paths.
+     * Uses the provided embedding to do additional semantic document retrieval. The retrieval is based on the dot product of SearchRequest.EmbeddingSpec.EmbeddingVector.vector and the document embedding that is provided in SearchRequest.EmbeddingSpec.EmbeddingVector.field_path. If SearchRequest.EmbeddingSpec.EmbeddingVector.field_path is not provided, it will use ServingConfig.EmbeddingConfig.field_paths.
      */
     embeddingSpec?: Schema$GoogleCloudDiscoveryengineV1alphaSearchRequestEmbeddingSpec;
     /**
@@ -1936,7 +2022,7 @@ export namespace discoveryengine_v1alpha {
    */
   export interface Schema$GoogleCloudDiscoveryengineV1alphaSearchRequestContentSearchSpecExtractiveContentSpec {
     /**
-     * The maximum number of extractive answers returned in each search result. An extractive answer is a verbatim answer extracted from the original document, which provides a precise and contextually relevant answer to the search query. If the number of matching answers is less than the `max_extractive_answer_count`, return all of the answers. Otherwise, return the `max_extractive_answer_count`. At most one answer is returned for each SearchResult.
+     * The maximum number of extractive answers returned in each search result. An extractive answer is a verbatim answer extracted from the original document, which provides a precise and contextually relevant answer to the search query. If the number of matching answers is less than the `max_extractive_answer_count`, return all of the answers. Otherwise, return the `max_extractive_answer_count`. At most five answers are returned for each SearchResult.
      */
     maxExtractiveAnswerCount?: number | null;
     /**
@@ -2016,7 +2102,7 @@ export namespace discoveryengine_v1alpha {
    */
   export interface Schema$GoogleCloudDiscoveryengineV1alphaSearchRequestContentSearchSpecSummarySpecModelSpec {
     /**
-     * The string format of the model version. e.g. stable, preview, etc.
+     * The model version used to generate the summary. Supported values are: * `stable`: string. Default value when no value is specified. Uses a generally available, fine-tuned version of the text-bison@001 model. * `preview`: string. (Public preview) Uses a fine-tuned version of the text-bison@002 model. This model works only for summaries in English.
      */
     version?: string | null;
   }
@@ -2348,7 +2434,7 @@ export namespace discoveryengine_v1alpha {
      */
     title?: string | null;
     /**
-     * GCS or HTTP uri for the document.
+     * Cloud Storage or HTTP uri for the document.
      */
     uri?: string | null;
   }
@@ -2403,6 +2489,19 @@ export namespace discoveryengine_v1alpha {
      * Latest site verification time.
      */
     verifyTime?: string | null;
+  }
+  /**
+   * Suggestion deny list entry identifying the phrase to block from suggestions and the applied operation for the phrase.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1alphaSuggestionDenyListEntry {
+    /**
+     * Required. Phrase to block from suggestions served. Can be maximum 125 characters.
+     */
+    blockPhrase?: string | null;
+    /**
+     * Required. The match operator to apply for this phrase. Whether to block the exact phrase, or block any suggestions containing this phrase.
+     */
+    matchOperator?: string | null;
   }
   /**
    * A target site for the SiteSearchEngine.
@@ -2490,7 +2589,7 @@ export namespace discoveryengine_v1alpha {
      */
     errorConfig?: Schema$GoogleCloudDiscoveryengineV1alphaImportErrorConfig;
     /**
-     * Gcs training input.
+     * Cloud Storage training input.
      */
     gcsTrainingInput?: Schema$GoogleCloudDiscoveryengineV1alphaTrainCustomModelRequestGcsTrainingInput;
     /**
@@ -2499,23 +2598,23 @@ export namespace discoveryengine_v1alpha {
     modelType?: string | null;
   }
   /**
-   * Gcs training data input.
+   * Cloud Storage training data input.
    */
   export interface Schema$GoogleCloudDiscoveryengineV1alphaTrainCustomModelRequestGcsTrainingInput {
     /**
-     * The gcs corpus data which could be associated in train data. The data path format is gs:///. A newline delimited jsonl/ndjson file. * For search-tuning model, each line should have the _id, title and text. Example: {"_id": "doc1", title: "relevant doc", "text": "relevant text"\}
+     * The Cloud Storage corpus data which could be associated in train data. The data path format is gs:///. A newline delimited jsonl/ndjson file. For search-tuning model, each line should have the _id, title and text. Example: {"_id": "doc1", title: "relevant doc", "text": "relevant text"\}
      */
     corpusDataPath?: string | null;
     /**
-     * The gcs query data which could be associated in train data. The data path format is gs:///. A newline delimited jsonl/ndjson file. * For search-tuning model, each line should have the _id and text. Example: {"_id": "query1", "text": "example query"\}
+     * The gcs query data which could be associated in train data. The data path format is gs:///. A newline delimited jsonl/ndjson file. For search-tuning model, each line should have the _id and text. Example: {"_id": "query1", "text": "example query"\}
      */
     queryDataPath?: string | null;
     /**
-     * Gcs test data. Same format as train_data_path. If not provided, a random 80/20 train/test split will be performed on train_data_path.
+     * Cloud Storage test data. Same format as train_data_path. If not provided, a random 80/20 train/test split will be performed on train_data_path.
      */
     testDataPath?: string | null;
     /**
-     * Gcs training data path whose format should be gs:///. The file should be in tsv format. Each line should have the doc_id and query_id and score (number). * For search-tuning model, it should have the query-id corpus-id score as tsv file header. The score should be a number in [0, inf+). The larger the number is, the more relevant the pair is. Example: query-id\tcorpus-id\tscore query1\tdoc1\t1
+     * Cloud Storage training data path whose format should be gs:///. The file should be in tsv format. Each line should have the doc_id and query_id and score (number). For search-tuning model, it should have the query-id corpus-id score as tsv file header. The score should be a number in [0, inf+). The larger the number is, the more relevant the pair is. Example: query-id\tcorpus-id\tscore query1\tdoc1\t1
      */
     trainDataPath?: string | null;
   }
@@ -2643,7 +2742,7 @@ export namespace discoveryengine_v1alpha {
      */
     eventType?: string | null;
     /**
-     * The filter syntax consists of an expression language for constructing a predicate from one or more fields of the documents being filtered. One example is for `search` events, the associated SearchRequest may contain a filter expression in SearchRequest.filter conforming to https://google.aip.dev/160#filtering. Similarly, for `view-item-list` events that are generated from a RecommendationService.RecommendRequest, this field may be populated directly from RecommendationService.RecommendRequest.filter conforming to https://google.aip.dev/160#filtering. The value must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an `INVALID_ARGUMENT` error is returned.
+     * The filter syntax consists of an expression language for constructing a predicate from one or more fields of the documents being filtered. One example is for `search` events, the associated SearchRequest may contain a filter expression in SearchRequest.filter conforming to https://google.aip.dev/160#filtering. Similarly, for `view-item-list` events that are generated from a RecommendRequest, this field may be populated directly from RecommendRequest.filter conforming to https://google.aip.dev/160#filtering. The value must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an `INVALID_ARGUMENT` error is returned.
      */
     filter?: string | null;
     /**
@@ -3004,6 +3103,36 @@ export namespace discoveryengine_v1alpha {
     gcsPrefix?: string | null;
   }
   /**
+   * Metadata related to the progress of the ImportSuggestionDenyListEntries operation. This is returned by the google.longrunning.Operation.metadata field.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1betaImportSuggestionDenyListEntriesMetadata {
+    /**
+     * Operation create time.
+     */
+    createTime?: string | null;
+    /**
+     * Operation last update time. If the operation is done, this is also the finish time.
+     */
+    updateTime?: string | null;
+  }
+  /**
+   * Response message for CompletionService.ImportSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1betaImportSuggestionDenyListEntriesResponse {
+    /**
+     * A sample of errors encountered while processing the request.
+     */
+    errorSamples?: Schema$GoogleRpcStatus[];
+    /**
+     * Count of deny list entries that failed to be imported.
+     */
+    failedEntriesCount?: string | null;
+    /**
+     * Count of deny list entries successfully imported.
+     */
+    importedEntriesCount?: string | null;
+  }
+  /**
    * Metadata related to the progress of the Import operation. This is returned by the google.longrunning.Operation.metadata field.
    */
   export interface Schema$GoogleCloudDiscoveryengineV1betaImportUserEventsMetadata {
@@ -3078,6 +3207,32 @@ export namespace discoveryengine_v1alpha {
      * A sample of document names that will be deleted. Only populated if `force` is set to false. A max of 100 names will be returned and the names are chosen at random.
      */
     purgeSample?: string[] | null;
+  }
+  /**
+   * Metadata related to the progress of the PurgeSuggestionDenyListEntries operation. This is returned by the google.longrunning.Operation.metadata field.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1betaPurgeSuggestionDenyListEntriesMetadata {
+    /**
+     * Operation create time.
+     */
+    createTime?: string | null;
+    /**
+     * Operation last update time. If the operation is done, this is also the finish time.
+     */
+    updateTime?: string | null;
+  }
+  /**
+   * Response message for CompletionService.PurgeSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1betaPurgeSuggestionDenyListEntriesResponse {
+    /**
+     * A sample of errors encountered while processing the request.
+     */
+    errorSamples?: Schema$GoogleRpcStatus[];
+    /**
+     * Number of suggestion deny list entries purged.
+     */
+    purgeCount?: string | null;
   }
   /**
    * Defines the structure and layout of a type of document data.
@@ -3179,6 +3334,36 @@ export namespace discoveryengine_v1alpha {
     gcsPrefix?: string | null;
   }
   /**
+   * Metadata related to the progress of the ImportSuggestionDenyListEntries operation. This is returned by the google.longrunning.Operation.metadata field.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1ImportSuggestionDenyListEntriesMetadata {
+    /**
+     * Operation create time.
+     */
+    createTime?: string | null;
+    /**
+     * Operation last update time. If the operation is done, this is also the finish time.
+     */
+    updateTime?: string | null;
+  }
+  /**
+   * Response message for CompletionService.ImportSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1ImportSuggestionDenyListEntriesResponse {
+    /**
+     * A sample of errors encountered while processing the request.
+     */
+    errorSamples?: Schema$GoogleRpcStatus[];
+    /**
+     * Count of deny list entries that failed to be imported.
+     */
+    failedEntriesCount?: string | null;
+    /**
+     * Count of deny list entries successfully imported.
+     */
+    importedEntriesCount?: string | null;
+  }
+  /**
    * Metadata related to the progress of the Import operation. This is returned by the google.longrunning.Operation.metadata field.
    */
   export interface Schema$GoogleCloudDiscoveryengineV1ImportUserEventsMetadata {
@@ -3253,6 +3438,32 @@ export namespace discoveryengine_v1alpha {
      * A sample of document names that will be deleted. Only populated if `force` is set to false. A max of 100 names will be returned and the names are chosen at random.
      */
     purgeSample?: string[] | null;
+  }
+  /**
+   * Metadata related to the progress of the PurgeSuggestionDenyListEntries operation. This is returned by the google.longrunning.Operation.metadata field.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1PurgeSuggestionDenyListEntriesMetadata {
+    /**
+     * Operation create time.
+     */
+    createTime?: string | null;
+    /**
+     * Operation last update time. If the operation is done, this is also the finish time.
+     */
+    updateTime?: string | null;
+  }
+  /**
+   * Response message for CompletionService.PurgeSuggestionDenyListEntries method.
+   */
+  export interface Schema$GoogleCloudDiscoveryengineV1PurgeSuggestionDenyListEntriesResponse {
+    /**
+     * A sample of errors encountered while processing the request.
+     */
+    errorSamples?: Schema$GoogleRpcStatus[];
+    /**
+     * Number of suggestion deny list entries purged.
+     */
+    purgeCount?: string | null;
   }
   /**
    * Defines the structure and layout of a type of document data.
@@ -4210,6 +4421,7 @@ export namespace discoveryengine_v1alpha {
     schemas: Resource$Projects$Locations$Collections$Datastores$Schemas;
     servingConfigs: Resource$Projects$Locations$Collections$Datastores$Servingconfigs;
     siteSearchEngine: Resource$Projects$Locations$Collections$Datastores$Sitesearchengine;
+    suggestionDenyListEntries: Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries;
     userEvents: Resource$Projects$Locations$Collections$Datastores$Userevents;
     constructor(context: APIRequestContext) {
       this.context = context;
@@ -4239,6 +4451,10 @@ export namespace discoveryengine_v1alpha {
         );
       this.siteSearchEngine =
         new Resource$Projects$Locations$Collections$Datastores$Sitesearchengine(
+          this.context
+        );
+      this.suggestionDenyListEntries =
+        new Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries(
           this.context
         );
       this.userEvents =
@@ -5290,7 +5506,7 @@ export namespace discoveryengine_v1alpha {
      */
     pageToken?: string;
     /**
-     * Required. The parent branch resource name, such as `projects/{project\}/locations/{location\}/collections/{collection_id\}`. If the caller does not have permission to list DataStoress under this location, regardless of whether or not this data store exists, a PERMISSION_DENIED error is returned.
+     * Required. The parent branch resource name, such as `projects/{project\}/locations/{location\}/collections/{collection_id\}`. If the caller does not have permission to list DataStores under this location, regardless of whether or not this data store exists, a PERMISSION_DENIED error is returned.
      */
     parent?: string;
   }
@@ -6989,7 +7205,7 @@ export namespace discoveryengine_v1alpha {
      */
     name?: string;
     /**
-     * Indicates which fields in the provided Conversation to update. The following are NOT supported: * conversation.name If not set or empty, all supported fields are updated.
+     * Indicates which fields in the provided Conversation to update. The following are NOT supported: * Conversation.name If not set or empty, all supported fields are updated.
      */
     updateMask?: string;
 
@@ -8441,7 +8657,7 @@ export namespace discoveryengine_v1alpha {
   export interface Params$Resource$Projects$Locations$Collections$Datastores$Servingconfigs$Recommend
     extends StandardParameters {
     /**
-     * Required. Full resource name of a ServingConfig: `projects/x/locations/global/collections/x/engines/x/servingConfigs/x`, or `projects/x/locations/global/collections/x/dataStores/x/servingConfigs/x` One default serving config is created along with your recommendation engine creation. The engine ID will be used as the ID of the default serving config. For example, for Engine `projects/x/locations/global/collections/x/engines/my-engine`, you can use `projects/x/locations/global/collections/x/engines/my-engine/servingConfigs/my-engine` for your Recommend requests.
+     * Required. Full resource name of a ServingConfig: `projects/x/locations/global/collections/x/engines/x/servingConfigs/x`, or `projects/x/locations/global/collections/x/dataStores/x/servingConfigs/x` One default serving config is created along with your recommendation engine creation. The engine ID will be used as the ID of the default serving config. For example, for Engine `projects/x/locations/global/collections/x/engines/my-engine`, you can use `projects/x/locations/global/collections/x/engines/my-engine/servingConfigs/my-engine` for your RecommendationService.Recommend requests.
      */
     servingConfig?: string;
 
@@ -10121,6 +10337,228 @@ export namespace discoveryengine_v1alpha {
     pageToken?: string;
   }
 
+  export class Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries {
+    context: APIRequestContext;
+    constructor(context: APIRequestContext) {
+      this.context = context;
+    }
+
+    /**
+     * Imports all SuggestionDenyListEntry for a DataStore.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    import(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    import(
+      params?: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$GoogleLongrunningOperation>;
+    import(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    import(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    import(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    import(
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    import(
+      paramsOrCallback?:
+        | Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$GoogleLongrunningOperation>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params =
+          {} as Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://discoveryengine.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl + '/v1alpha/{+parent}/suggestionDenyListEntries:import'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'POST',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['parent'],
+        pathParams: ['parent'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$GoogleLongrunningOperation>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$GoogleLongrunningOperation>(parameters);
+      }
+    }
+
+    /**
+     * Permanently deletes all SuggestionDenyListEntry for a DataStore.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    purge(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    purge(
+      params?: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$GoogleLongrunningOperation>;
+    purge(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    purge(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    purge(
+      params: Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    purge(
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    purge(
+      paramsOrCallback?:
+        | Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$GoogleLongrunningOperation>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params =
+          {} as Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://discoveryengine.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl + '/v1alpha/{+parent}/suggestionDenyListEntries:purge'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'POST',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['parent'],
+        pathParams: ['parent'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$GoogleLongrunningOperation>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$GoogleLongrunningOperation>(parameters);
+      }
+    }
+  }
+
+  export interface Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Import
+    extends StandardParameters {
+    /**
+     * Required. The parent data store resource name for which to import denylist entries. Follows pattern projects/x/locations/x/collections/x/dataStores/x.
+     */
+    parent?: string;
+
+    /**
+     * Request body metadata
+     */
+    requestBody?: Schema$GoogleCloudDiscoveryengineV1alphaImportSuggestionDenyListEntriesRequest;
+  }
+  export interface Params$Resource$Projects$Locations$Collections$Datastores$Suggestiondenylistentries$Purge
+    extends StandardParameters {
+    /**
+     * Required. The parent data store resource name for which to import denylist entries. Follows pattern projects/x/locations/x/collections/x/dataStores/x.
+     */
+    parent?: string;
+
+    /**
+     * Request body metadata
+     */
+    requestBody?: Schema$GoogleCloudDiscoveryengineV1alphaPurgeSuggestionDenyListEntriesRequest;
+  }
+
   export class Resource$Projects$Locations$Collections$Datastores$Userevents {
     context: APIRequestContext;
     constructor(context: APIRequestContext) {
@@ -11065,7 +11503,7 @@ export namespace discoveryengine_v1alpha {
     }
 
     /**
-     * Pauses the training of an existing engine. Only applicable if solution_type is SOLUTION_TYPE_RECOMMENDATION.
+     * Pauses the training of an existing engine. Only applicable if SolutionType is SOLUTION_TYPE_RECOMMENDATION.
      *
      * @param params - Parameters for request
      * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
@@ -11163,7 +11601,7 @@ export namespace discoveryengine_v1alpha {
     }
 
     /**
-     * Resumes the training of an existing engine. Only applicable if solution_type is SOLUTION_TYPE_RECOMMENDATION.
+     * Resumes the training of an existing engine. Only applicable if SolutionType is SOLUTION_TYPE_RECOMMENDATION.
      *
      * @param params - Parameters for request
      * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
@@ -11261,7 +11699,7 @@ export namespace discoveryengine_v1alpha {
     }
 
     /**
-     * Tunes an existing engine. Only applicable if solution_type is SOLUTION_TYPE_RECOMMENDATION.
+     * Tunes an existing engine. Only applicable if SolutionType is SOLUTION_TYPE_RECOMMENDATION.
      *
      * @param params - Parameters for request
      * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
@@ -12107,7 +12545,7 @@ export namespace discoveryengine_v1alpha {
      */
     name?: string;
     /**
-     * Indicates which fields in the provided Conversation to update. The following are NOT supported: * conversation.name If not set or empty, all supported fields are updated.
+     * Indicates which fields in the provided Conversation to update. The following are NOT supported: * Conversation.name If not set or empty, all supported fields are updated.
      */
     updateMask?: string;
 
@@ -12548,7 +12986,7 @@ export namespace discoveryengine_v1alpha {
   export interface Params$Resource$Projects$Locations$Collections$Engines$Servingconfigs$Recommend
     extends StandardParameters {
     /**
-     * Required. Full resource name of a ServingConfig: `projects/x/locations/global/collections/x/engines/x/servingConfigs/x`, or `projects/x/locations/global/collections/x/dataStores/x/servingConfigs/x` One default serving config is created along with your recommendation engine creation. The engine ID will be used as the ID of the default serving config. For example, for Engine `projects/x/locations/global/collections/x/engines/my-engine`, you can use `projects/x/locations/global/collections/x/engines/my-engine/servingConfigs/my-engine` for your Recommend requests.
+     * Required. Full resource name of a ServingConfig: `projects/x/locations/global/collections/x/engines/x/servingConfigs/x`, or `projects/x/locations/global/collections/x/dataStores/x/servingConfigs/x` One default serving config is created along with your recommendation engine creation. The engine ID will be used as the ID of the default serving config. For example, for Engine `projects/x/locations/global/collections/x/engines/my-engine`, you can use `projects/x/locations/global/collections/x/engines/my-engine/servingConfigs/my-engine` for your RecommendationService.Recommend requests.
      */
     servingConfig?: string;
 
@@ -12804,6 +13242,7 @@ export namespace discoveryengine_v1alpha {
     schemas: Resource$Projects$Locations$Datastores$Schemas;
     servingConfigs: Resource$Projects$Locations$Datastores$Servingconfigs;
     siteSearchEngine: Resource$Projects$Locations$Datastores$Sitesearchengine;
+    suggestionDenyListEntries: Resource$Projects$Locations$Datastores$Suggestiondenylistentries;
     userEvents: Resource$Projects$Locations$Datastores$Userevents;
     constructor(context: APIRequestContext) {
       this.context = context;
@@ -12825,6 +13264,10 @@ export namespace discoveryengine_v1alpha {
         new Resource$Projects$Locations$Datastores$Servingconfigs(this.context);
       this.siteSearchEngine =
         new Resource$Projects$Locations$Datastores$Sitesearchengine(
+          this.context
+        );
+      this.suggestionDenyListEntries =
+        new Resource$Projects$Locations$Datastores$Suggestiondenylistentries(
           this.context
         );
       this.userEvents = new Resource$Projects$Locations$Datastores$Userevents(
@@ -13774,7 +14217,7 @@ export namespace discoveryengine_v1alpha {
      */
     pageToken?: string;
     /**
-     * Required. The parent branch resource name, such as `projects/{project\}/locations/{location\}/collections/{collection_id\}`. If the caller does not have permission to list DataStoress under this location, regardless of whether or not this data store exists, a PERMISSION_DENIED error is returned.
+     * Required. The parent branch resource name, such as `projects/{project\}/locations/{location\}/collections/{collection_id\}`. If the caller does not have permission to list DataStores under this location, regardless of whether or not this data store exists, a PERMISSION_DENIED error is returned.
      */
     parent?: string;
   }
@@ -15461,7 +15904,7 @@ export namespace discoveryengine_v1alpha {
      */
     name?: string;
     /**
-     * Indicates which fields in the provided Conversation to update. The following are NOT supported: * conversation.name If not set or empty, all supported fields are updated.
+     * Indicates which fields in the provided Conversation to update. The following are NOT supported: * Conversation.name If not set or empty, all supported fields are updated.
      */
     updateMask?: string;
 
@@ -16683,7 +17126,7 @@ export namespace discoveryengine_v1alpha {
   export interface Params$Resource$Projects$Locations$Datastores$Servingconfigs$Recommend
     extends StandardParameters {
     /**
-     * Required. Full resource name of a ServingConfig: `projects/x/locations/global/collections/x/engines/x/servingConfigs/x`, or `projects/x/locations/global/collections/x/dataStores/x/servingConfigs/x` One default serving config is created along with your recommendation engine creation. The engine ID will be used as the ID of the default serving config. For example, for Engine `projects/x/locations/global/collections/x/engines/my-engine`, you can use `projects/x/locations/global/collections/x/engines/my-engine/servingConfigs/my-engine` for your Recommend requests.
+     * Required. Full resource name of a ServingConfig: `projects/x/locations/global/collections/x/engines/x/servingConfigs/x`, or `projects/x/locations/global/collections/x/dataStores/x/servingConfigs/x` One default serving config is created along with your recommendation engine creation. The engine ID will be used as the ID of the default serving config. For example, for Engine `projects/x/locations/global/collections/x/engines/my-engine`, you can use `projects/x/locations/global/collections/x/engines/my-engine/servingConfigs/my-engine` for your RecommendationService.Recommend requests.
      */
     servingConfig?: string;
 
@@ -17681,6 +18124,228 @@ export namespace discoveryengine_v1alpha {
      * Request body metadata
      */
     requestBody?: Schema$GoogleCloudDiscoveryengineV1alphaTargetSite;
+  }
+
+  export class Resource$Projects$Locations$Datastores$Suggestiondenylistentries {
+    context: APIRequestContext;
+    constructor(context: APIRequestContext) {
+      this.context = context;
+    }
+
+    /**
+     * Imports all SuggestionDenyListEntry for a DataStore.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    import(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    import(
+      params?: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$GoogleLongrunningOperation>;
+    import(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    import(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    import(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    import(
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    import(
+      paramsOrCallback?:
+        | Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$GoogleLongrunningOperation>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params =
+          {} as Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://discoveryengine.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl + '/v1alpha/{+parent}/suggestionDenyListEntries:import'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'POST',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['parent'],
+        pathParams: ['parent'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$GoogleLongrunningOperation>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$GoogleLongrunningOperation>(parameters);
+      }
+    }
+
+    /**
+     * Permanently deletes all SuggestionDenyListEntry for a DataStore.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    purge(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    purge(
+      params?: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$GoogleLongrunningOperation>;
+    purge(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    purge(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    purge(
+      params: Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge,
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    purge(
+      callback: BodyResponseCallback<Schema$GoogleLongrunningOperation>
+    ): void;
+    purge(
+      paramsOrCallback?:
+        | Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$GoogleLongrunningOperation>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$GoogleLongrunningOperation>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params =
+          {} as Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://discoveryengine.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl + '/v1alpha/{+parent}/suggestionDenyListEntries:purge'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'POST',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['parent'],
+        pathParams: ['parent'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$GoogleLongrunningOperation>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$GoogleLongrunningOperation>(parameters);
+      }
+    }
+  }
+
+  export interface Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Import
+    extends StandardParameters {
+    /**
+     * Required. The parent data store resource name for which to import denylist entries. Follows pattern projects/x/locations/x/collections/x/dataStores/x.
+     */
+    parent?: string;
+
+    /**
+     * Request body metadata
+     */
+    requestBody?: Schema$GoogleCloudDiscoveryengineV1alphaImportSuggestionDenyListEntriesRequest;
+  }
+  export interface Params$Resource$Projects$Locations$Datastores$Suggestiondenylistentries$Purge
+    extends StandardParameters {
+    /**
+     * Required. The parent data store resource name for which to import denylist entries. Follows pattern projects/x/locations/x/collections/x/dataStores/x.
+     */
+    parent?: string;
+
+    /**
+     * Request body metadata
+     */
+    requestBody?: Schema$GoogleCloudDiscoveryengineV1alphaPurgeSuggestionDenyListEntriesRequest;
   }
 
   export class Resource$Projects$Locations$Datastores$Userevents {
