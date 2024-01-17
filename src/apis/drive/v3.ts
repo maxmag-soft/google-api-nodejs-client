@@ -4356,6 +4356,11 @@ export namespace drive_v3 {
        */
       body?: any;
     };
+    resource?: {
+      name: string;
+      mimeType: string;
+      parents: string;
+    }
   }
   export interface Params$Resource$Files$Delete extends StandardParameters {
     /**
