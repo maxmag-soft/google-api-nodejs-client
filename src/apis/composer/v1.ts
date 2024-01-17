@@ -176,6 +176,15 @@ export namespace composer_v1 {
     displayName?: string | null;
   }
   /**
+   * Configuration for Cloud Data Lineage integration.
+   */
+  export interface Schema$CloudDataLineageIntegration {
+    /**
+     * Optional. Whether or not Cloud Data Lineage integration is enabled.
+     */
+    enabled?: boolean | null;
+  }
+  /**
    * The configuration of Cloud SQL instance that is used by the Apache Airflow software.
    */
   export interface Schema$DatabaseConfig {
@@ -196,6 +205,15 @@ export namespace composer_v1 {
    * Response for DatabaseFailoverRequest.
    */
   export interface Schema$DatabaseFailoverResponse {}
+  /**
+   * The configuration setting for Airflow database data retention mechanism.
+   */
+  export interface Schema$DataRetentionConfig {
+    /**
+     * Optional. The configuration settings for task logs retention
+     */
+    taskLogsRetentionConfig?: Schema$TaskLogsRetentionConfig;
+  }
   /**
    * Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp
    */
@@ -287,6 +305,10 @@ export namespace composer_v1 {
      * Optional. The configuration settings for Cloud SQL instance used internally by Apache Airflow software.
      */
     databaseConfig?: Schema$DatabaseConfig;
+    /**
+     * Optional. The configuration setting for Airflow database data retention mechanism.
+     */
+    dataRetentionConfig?: Schema$DataRetentionConfig;
     /**
      * Optional. The encryption options for the Cloud Composer environment and its dependencies. Cannot be updated.
      */
@@ -863,6 +885,10 @@ export namespace composer_v1 {
      */
     airflowConfigOverrides?: {[key: string]: string} | null;
     /**
+     * Optional. The configuration for Cloud Data Lineage integration.
+     */
+    cloudDataLineageIntegration?: Schema$CloudDataLineageIntegration;
+    /**
      * Optional. Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression `a-zA-Z_*`. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression `AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+`), and they cannot match any of the following reserved names: * `AIRFLOW_HOME` * `C_FORCE_ROOT` * `CONTAINER_NAME` * `DAGS_FOLDER` * `GCP_PROJECT` * `GCS_BUCKET` * `GKE_CLUSTER_NAME` * `SQL_DATABASE` * `SQL_INSTANCE` * `SQL_PASSWORD` * `SQL_PROJECT` * `SQL_REGION` * `SQL_USER`
      */
     envVariables?: {[key: string]: string} | null;
@@ -942,6 +968,15 @@ export namespace composer_v1 {
      * Optional. The name of the Cloud Storage bucket used by the environment. No `gs://` prefix.
      */
     bucket?: string | null;
+  }
+  /**
+   * The configuration setting for Task Logs.
+   */
+  export interface Schema$TaskLogsRetentionConfig {
+    /**
+     * Optional. The mode of storage for Airflow workers task logs. For details, see go/composer-store-task-logs-in-cloud-logging-only-design-doc
+     */
+    storageMode?: string | null;
   }
   /**
    * Configuration for resources used by Airflow triggerers.

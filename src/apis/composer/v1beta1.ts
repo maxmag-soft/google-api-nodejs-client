@@ -236,6 +236,15 @@ export namespace composer_v1beta1 {
    */
   export interface Schema$DatabaseFailoverResponse {}
   /**
+   * The configuration setting for Airflow database data retention mechanism.
+   */
+  export interface Schema$DataRetentionConfig {
+    /**
+     * Optional. The configuration settings for task logs retention
+     */
+    taskLogsRetentionConfig?: Schema$TaskLogsRetentionConfig;
+  }
+  /**
    * Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp
    */
   export interface Schema$Date {
@@ -326,6 +335,10 @@ export namespace composer_v1beta1 {
      * Optional. The configuration settings for Cloud SQL instance used internally by Apache Airflow software.
      */
     databaseConfig?: Schema$DatabaseConfig;
+    /**
+     * Optional. The configuration setting for Airflow database data retention mechanism.
+     */
+    dataRetentionConfig?: Schema$DataRetentionConfig;
     /**
      * Optional. The encryption options for the Cloud Composer environment and its dependencies. Cannot be updated.
      */
@@ -1009,6 +1022,15 @@ export namespace composer_v1beta1 {
      * Optional. The name of the Cloud Storage bucket used by the environment. No `gs://` prefix.
      */
     bucket?: string | null;
+  }
+  /**
+   * The configuration setting for Task Logs.
+   */
+  export interface Schema$TaskLogsRetentionConfig {
+    /**
+     * Optional. The mode of storage for Airflow workers task logs. For details, see go/composer-store-task-logs-in-cloud-logging-only-design-doc
+     */
+    storageMode?: string | null;
   }
   /**
    * Configuration for resources used by Airflow triggerers.
