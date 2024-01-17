@@ -2025,6 +2025,10 @@ export namespace walletobjects_v1 {
   }
   export interface Schema$Issuer {
     /**
+     * Allows the issuer to provide their callback settings.
+     */
+    callbackOptions?: Schema$CallbackOptions;
+    /**
      * Issuer contact information.
      */
     contactInfo?: Schema$IssuerContactInfo;
