@@ -6139,7 +6139,7 @@ export namespace displayvideo_v3 {
     includeYoutubeVideoPartners?: boolean | null;
   }
   /**
-   * Settings for YouTube and Partners line items.
+   * Settings for YouTube and Partners line items. Next ID: 15
    */
   export interface Schema$YoutubeAndPartnersSettings {
     /**
