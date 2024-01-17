@@ -1073,6 +1073,10 @@ export namespace retail_v2beta {
      * Each instance replaces a list of facet values by a merged facet value. If a facet value is not in any list, then it will stay the same. To avoid conflicts, only paths of length 1 are accepted. In other words, if "dark_blue" merged into "BLUE", then the latter can't merge into "blues" because this would create a path of length 2. The maximum number of instances of MergedFacetValue per CatalogAttribute is 100. This feature is available only for textual custom attributes.
      */
     mergedFacetValues?: Schema$GoogleCloudRetailV2betaCatalogAttributeFacetConfigMergedFacetValue[];
+    /**
+     * Set this field only if you want to rerank based on facet values engaged by the user for the current key. This option is only possible for custom facetable textual keys.
+     */
+    rerankConfig?: Schema$GoogleCloudRetailV2betaCatalogAttributeFacetConfigRerankConfig;
   }
   /**
    * Facet values to ignore on facets during the specified time range for the given SearchResponse.Facet.key attribute.
@@ -1103,6 +1107,19 @@ export namespace retail_v2beta {
      * All the facet values that are replaces by the same merged_value that follows. The maximum number of values per MergedFacetValue is 25. Each value can have up to 128 characters.
      */
     values?: string[] | null;
+  }
+  /**
+   * Options to rerank based on facet values engaged by the user for the current key. That key needs to be a custom textual key and facetable. To use this control, you also need to pass all the facet keys engaged by the user in the request using the field [SearchRequest.FacetSpec]. In particular, if you don't pass the facet keys engaged that you want to rerank on, this control won't be effective. Moreover, to obtain better results, the facet values that you want to rerank on should be close to English (ideally made of words, underscores, and spaces).
+   */
+  export interface Schema$GoogleCloudRetailV2betaCatalogAttributeFacetConfigRerankConfig {
+    /**
+     * If empty, rerank on all facet values for the current key. Otherwise, will rerank on the facet values from this list only.
+     */
+    facetValues?: string[] | null;
+    /**
+     * If set to true, then we also rerank the dynamic facets based on the facet values engaged by the user for the current attribute key during serving.
+     */
+    rerankFacet?: boolean | null;
   }
   /**
    * The color information of a Product.
