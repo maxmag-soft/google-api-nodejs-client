@@ -757,11 +757,11 @@ export namespace cloudasset_v1beta1 {
    */
   export interface Schema$GoogleIdentityAccesscontextmanagerV1MethodSelector {
     /**
-     * Value for `method` should be a valid method name for the corresponding `service_name` in ApiOperation. If `*` used as value for `method`, then ALL methods and permissions are allowed.
+     * A valid method name for the corresponding `service_name` in ApiOperation. If `*` is used as the value for the `method`, then ALL methods and permissions are allowed.
      */
     method?: string | null;
     /**
-     * Value for `permission` should be a valid Cloud IAM permission for the corresponding `service_name` in ApiOperation.
+     * A valid Cloud IAM permission for the corresponding `service_name` in ApiOperation.
      */
     permission?: string | null;
   }
