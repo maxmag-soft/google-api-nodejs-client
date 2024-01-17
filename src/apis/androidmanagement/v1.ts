@@ -1014,6 +1014,10 @@ export namespace androidmanagement_v1 {
      */
     cellularTwoGState?: string | null;
     /**
+     * The minimum required security level of Wi-Fi networks that the device can connect to.
+     */
+    minimumWifiSecurityLevel?: string | null;
+    /**
      * Controls the state of the ultra wideband setting and whether the user can toggle it on or off.
      */
     ultraWidebandState?: string | null;
