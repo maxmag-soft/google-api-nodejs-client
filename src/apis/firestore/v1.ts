@@ -691,6 +691,19 @@ export namespace firestore_v1 {
     versionRetentionPeriod?: string | null;
   }
   /**
+   * A consistent snapshot of a database at a specific point in time.
+   */
+  export interface Schema$GoogleFirestoreAdminV1DatabaseSnapshot {
+    /**
+     * Required. A name of the form `projects/{project_id\}/databases/{database_id\}`
+     */
+    database?: string | null;
+    /**
+     * Required. The timestamp at which the database snapshot is taken. The requested timestamp must be a whole minute within the PITR window.
+     */
+    snapshotTime?: string | null;
+  }
+  /**
    * Metadata related to the delete database operation.
    */
   export interface Schema$GoogleFirestoreAdminV1DeleteDatabaseMetadata {}
@@ -1105,6 +1118,10 @@ export namespace firestore_v1 {
      * Required. The ID to use for the database, which will become the final component of the database's resource name. This database id must not be associated with an existing database. This value should be 4-63 characters. Valid characters are /a-z-/ with first character a letter and the last a letter or a number. Must not be UUID-like /[0-9a-f]{8\}(-[0-9a-f]{4\}){3\}-[0-9a-f]{12\}/. "(default)" database id is also valid.
      */
     databaseId?: string | null;
+    /**
+     * Database snapshot to restore from. The source database must exist and have enabled PITR. The restored database will be created in the same location as the source database.
+     */
+    databaseSnapshot?: Schema$GoogleFirestoreAdminV1DatabaseSnapshot;
   }
   /**
    * Backup specific statistics.
@@ -1363,7 +1380,7 @@ export namespace firestore_v1 {
      */
     direction?: string | null;
     /**
-     * The field to order by.
+     * Order based on the value referenced by this field.
      */
     field?: Schema$FieldReference;
   }

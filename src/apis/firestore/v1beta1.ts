@@ -948,7 +948,7 @@ export namespace firestore_v1beta1 {
      */
     direction?: string | null;
     /**
-     * The field to order by.
+     * Order based on the value referenced by this field.
      */
     field?: Schema$FieldReference;
   }
