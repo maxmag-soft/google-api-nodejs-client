@@ -681,11 +681,11 @@ export namespace content_v2_1 {
      */
     linkedAccountId?: string | null;
     /**
-     * Type of the link between the two accounts. Acceptable values are: - "`channelPartner`" - "`eCommercePlatform`" - "`paymentServiceProvider`"
+     * Type of the link between the two accounts. Acceptable values are: - "`channelPartner`" - "`eCommercePlatform`" - "`paymentServiceProvider`" - "`localProductManager`"
      */
     linkType?: string | null;
     /**
-     * Provided services. Acceptable values are: - "`shoppingAdsProductManagement`" - "`shoppingActionsProductManagement`" - "`shoppingActionsOrderManagement`" - "`paymentProcessing`"
+     * Provided services. Acceptable values are: - "`shoppingAdsProductManagement`" - "`shoppingActionsProductManagement`" - "`shoppingActionsOrderManagement`" - "`paymentProcessing`" - "`localProductManagement`"
      */
     services?: string[] | null;
   }
@@ -1383,6 +1383,19 @@ export namespace content_v2_1 {
      * Regular business days, such as '"monday"'. May not be empty.
      */
     businessDays?: string[] | null;
+  }
+  /**
+   * A Link from a [Business Messages](https://businessmessages.google) Agent Id to the Merchant Center account. You can create multiple `BusinessMessagesLink` to Merchant Center Account. Only available to selected merchants. See [Create agents to manage brands](https://developers.google.com/business-communications/business-messages/guides/how-to/agents) for more information.
+   */
+  export interface Schema$BusinessMessagesLink {
+    /**
+     * Required. Agent ID from Business Messages to link to the Merchant Center account. The Agent ID can be found in the [Business Communications Developer Console](https://developers.google.com/business-communications/business-messages/guides/concepts/developer-console#agent_selection).
+     */
+    agentId?: string | null;
+    /**
+     * Output only. Immutable. The ID uniquely identifying each `BusinessMessagesLink`.
+     */
+    businessMessagesLinkId?: string | null;
   }
   /**
    * Response message for the GetProgramStatus method.
@@ -2983,6 +2996,19 @@ export namespace content_v2_1 {
      * List of all available account return carriers for the merchant.
      */
     accountReturnCarriers?: Schema$AccountReturnCarrier[];
+  }
+  /**
+   * Response message for the `ListBusinessMessagesLinks` method.
+   */
+  export interface Schema$ListBusinessMessagesLinksResponse {
+    /**
+     * The `BusinessMessagesLink` resources for the given Merchant Center account.
+     */
+    businessMessagesLinks?: Schema$BusinessMessagesLink[];
+    /**
+     * A token, which can be sent as `pageToken` to retrieve the next page. If this field is omitted, there are no subsequent pages.
+     */
+    nextPageToken?: string | null;
   }
   /**
    * Response message for the ListCollections method.
@@ -6933,7 +6959,7 @@ export namespace content_v2_1 {
      */
     getThisQuantityDiscounted?: number | null;
     /**
-     * Required. Output only. The REST promotion ID to uniquely identify the promotion. Content API methods that operate on promotions take this as their `promotionId` parameter. The REST ID for a promotion is of the form channel:contentLanguage:targetCountry:promotionId The `channel` field has a value of `"online"`, `"in_store"`, or `"online_in_store"`.
+     * Output only. The REST promotion ID to uniquely identify the promotion. Content API methods that operate on promotions take this as their `promotionId` parameter. The REST ID for a promotion is of the form channel:contentLanguage:targetCountry:promotionId The `channel` field has a value of `"online"`, `"in_store"`, or `"online_in_store"`.
      */
     id?: string | null;
     /**
@@ -9064,11 +9090,15 @@ export namespace content_v2_1 {
 
   export class Resource$Accounts {
     context: APIRequestContext;
+    businessmessageslinks: Resource$Accounts$Businessmessageslinks;
     credentials: Resource$Accounts$Credentials;
     labels: Resource$Accounts$Labels;
     returncarrier: Resource$Accounts$Returncarrier;
     constructor(context: APIRequestContext) {
       this.context = context;
+      this.businessmessageslinks = new Resource$Accounts$Businessmessageslinks(
+        this.context
+      );
       this.credentials = new Resource$Accounts$Credentials(this.context);
       this.labels = new Resource$Accounts$Labels(this.context);
       this.returncarrier = new Resource$Accounts$Returncarrier(this.context);
@@ -10457,6 +10487,432 @@ export namespace content_v2_1 {
      * Request body metadata
      */
     requestBody?: Schema$VerifyPhoneNumberRequest;
+  }
+
+  export class Resource$Accounts$Businessmessageslinks {
+    context: APIRequestContext;
+    constructor(context: APIRequestContext) {
+      this.context = context;
+    }
+
+    /**
+     * Creates a `BusinessMessagesLink` in Merchant Center account.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    create(
+      params: Params$Resource$Accounts$Businessmessageslinks$Create,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    create(
+      params?: Params$Resource$Accounts$Businessmessageslinks$Create,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$BusinessMessagesLink>;
+    create(
+      params: Params$Resource$Accounts$Businessmessageslinks$Create,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    create(
+      params: Params$Resource$Accounts$Businessmessageslinks$Create,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$BusinessMessagesLink>,
+      callback: BodyResponseCallback<Schema$BusinessMessagesLink>
+    ): void;
+    create(
+      params: Params$Resource$Accounts$Businessmessageslinks$Create,
+      callback: BodyResponseCallback<Schema$BusinessMessagesLink>
+    ): void;
+    create(callback: BodyResponseCallback<Schema$BusinessMessagesLink>): void;
+    create(
+      paramsOrCallback?:
+        | Params$Resource$Accounts$Businessmessageslinks$Create
+        | BodyResponseCallback<Schema$BusinessMessagesLink>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$BusinessMessagesLink>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$BusinessMessagesLink>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$BusinessMessagesLink>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Accounts$Businessmessageslinks$Create;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params = {} as Params$Resource$Accounts$Businessmessageslinks$Create;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://shoppingcontent.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl +
+              '/content/v2.1/accounts/{accountId}/businessmessageslinks'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'POST',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['accountId'],
+        pathParams: ['accountId'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$BusinessMessagesLink>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$BusinessMessagesLink>(parameters);
+      }
+    }
+
+    /**
+     * Deletes the specified `BusinessMessagesLink` resource from Merchant Center account.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    delete(
+      params: Params$Resource$Accounts$Businessmessageslinks$Delete,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    delete(
+      params?: Params$Resource$Accounts$Businessmessageslinks$Delete,
+      options?: MethodOptions
+    ): GaxiosPromise<void>;
+    delete(
+      params: Params$Resource$Accounts$Businessmessageslinks$Delete,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    delete(
+      params: Params$Resource$Accounts$Businessmessageslinks$Delete,
+      options: MethodOptions | BodyResponseCallback<void>,
+      callback: BodyResponseCallback<void>
+    ): void;
+    delete(
+      params: Params$Resource$Accounts$Businessmessageslinks$Delete,
+      callback: BodyResponseCallback<void>
+    ): void;
+    delete(callback: BodyResponseCallback<void>): void;
+    delete(
+      paramsOrCallback?:
+        | Params$Resource$Accounts$Businessmessageslinks$Delete
+        | BodyResponseCallback<void>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<void>
+        | BodyResponseCallback<Readable>,
+      callback?: BodyResponseCallback<void> | BodyResponseCallback<Readable>
+    ): void | GaxiosPromise<void> | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Accounts$Businessmessageslinks$Delete;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params = {} as Params$Resource$Accounts$Businessmessageslinks$Delete;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://shoppingcontent.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl +
+              '/content/v2.1/accounts/{accountId}/businessmessageslinks/{businessMessagesLinkId}'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'DELETE',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['accountId', 'businessMessagesLinkId'],
+        pathParams: ['accountId', 'businessMessagesLinkId'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<void>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<void>(parameters);
+      }
+    }
+
+    /**
+     * Retrieves `BusinessMessagesLink` in Merchant Center account.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    get(
+      params: Params$Resource$Accounts$Businessmessageslinks$Get,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    get(
+      params?: Params$Resource$Accounts$Businessmessageslinks$Get,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$BusinessMessagesLink>;
+    get(
+      params: Params$Resource$Accounts$Businessmessageslinks$Get,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    get(
+      params: Params$Resource$Accounts$Businessmessageslinks$Get,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$BusinessMessagesLink>,
+      callback: BodyResponseCallback<Schema$BusinessMessagesLink>
+    ): void;
+    get(
+      params: Params$Resource$Accounts$Businessmessageslinks$Get,
+      callback: BodyResponseCallback<Schema$BusinessMessagesLink>
+    ): void;
+    get(callback: BodyResponseCallback<Schema$BusinessMessagesLink>): void;
+    get(
+      paramsOrCallback?:
+        | Params$Resource$Accounts$Businessmessageslinks$Get
+        | BodyResponseCallback<Schema$BusinessMessagesLink>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$BusinessMessagesLink>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$BusinessMessagesLink>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$BusinessMessagesLink>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Accounts$Businessmessageslinks$Get;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params = {} as Params$Resource$Accounts$Businessmessageslinks$Get;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://shoppingcontent.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl +
+              '/content/v2.1/accounts/{accountId}/businessmessageslinks/{businessMessagesLinkId}'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'GET',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['accountId', 'businessMessagesLinkId'],
+        pathParams: ['accountId', 'businessMessagesLinkId'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$BusinessMessagesLink>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$BusinessMessagesLink>(parameters);
+      }
+    }
+
+    /**
+     * Lists the `BusinessMessagesLink` resources for Merchant Center account.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    list(
+      params: Params$Resource$Accounts$Businessmessageslinks$List,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    list(
+      params?: Params$Resource$Accounts$Businessmessageslinks$List,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$ListBusinessMessagesLinksResponse>;
+    list(
+      params: Params$Resource$Accounts$Businessmessageslinks$List,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    list(
+      params: Params$Resource$Accounts$Businessmessageslinks$List,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$ListBusinessMessagesLinksResponse>,
+      callback: BodyResponseCallback<Schema$ListBusinessMessagesLinksResponse>
+    ): void;
+    list(
+      params: Params$Resource$Accounts$Businessmessageslinks$List,
+      callback: BodyResponseCallback<Schema$ListBusinessMessagesLinksResponse>
+    ): void;
+    list(
+      callback: BodyResponseCallback<Schema$ListBusinessMessagesLinksResponse>
+    ): void;
+    list(
+      paramsOrCallback?:
+        | Params$Resource$Accounts$Businessmessageslinks$List
+        | BodyResponseCallback<Schema$ListBusinessMessagesLinksResponse>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$ListBusinessMessagesLinksResponse>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$ListBusinessMessagesLinksResponse>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$ListBusinessMessagesLinksResponse>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Accounts$Businessmessageslinks$List;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params = {} as Params$Resource$Accounts$Businessmessageslinks$List;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://shoppingcontent.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl +
+              '/content/v2.1/accounts/{accountId}/businessmessageslinks'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'GET',
+          },
+          options
+        ),
+        params,
+        requiredParams: ['accountId'],
+        pathParams: ['accountId'],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$ListBusinessMessagesLinksResponse>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$ListBusinessMessagesLinksResponse>(
+          parameters
+        );
+      }
+    }
+  }
+
+  export interface Params$Resource$Accounts$Businessmessageslinks$Create
+    extends StandardParameters {
+    /**
+     * Required. The ID of the Merchant Center account.
+     */
+    accountId?: string;
+
+    /**
+     * Request body metadata
+     */
+    requestBody?: Schema$BusinessMessagesLink;
+  }
+  export interface Params$Resource$Accounts$Businessmessageslinks$Delete
+    extends StandardParameters {
+    /**
+     * Required. The ID of the Merchant Center account.
+     */
+    accountId?: string;
+    /**
+     * Required. The identifier for the Business Messages Link.
+     */
+    businessMessagesLinkId?: string;
+  }
+  export interface Params$Resource$Accounts$Businessmessageslinks$Get
+    extends StandardParameters {
+    /**
+     * Required. The ID of the Merchant Center account.
+     */
+    accountId?: string;
+    /**
+     * Required. The identifier for the Business Messages Link.
+     */
+    businessMessagesLinkId?: string;
+  }
+  export interface Params$Resource$Accounts$Businessmessageslinks$List
+    extends StandardParameters {
+    /**
+     * Required. The ID of the account.
+     */
+    accountId?: string;
+    /**
+     * Optional. The maximum number of `BusinessMessagesLink` resources for the Merchant Center account to return. Defaults to 50; values above 1000 will be coerced to 1000.
+     */
+    pageSize?: number;
+    /**
+     * Optional. A page token, received from a previous `ListBusinessMessagesLinks` call. Provide the page token to retrieve the subsequent page. When paginating, all other parameters provided to `ListBusinessMessagesLinks` must match the call that provided the page token.
+     */
+    pageToken?: string;
   }
 
   export class Resource$Accounts$Credentials {
@@ -17539,7 +17995,7 @@ export namespace content_v2_1 {
   export interface Params$Resource$Merchantsupport$Renderaccountissues
     extends StandardParameters {
     /**
-     * Optional. The [IETF BCP-47](https://tools.ietf.org/html/bcp47) language code used to localize support content. If not set, the result will be in default language ('en-US').
+     * Optional. The [IETF BCP-47](https://tools.ietf.org/html/bcp47) language code used to localize support content. If not set, the result will be in default language `en-US`.
      */
     languageCode?: string;
     /**
@@ -17559,7 +18015,7 @@ export namespace content_v2_1 {
   export interface Params$Resource$Merchantsupport$Renderproductissues
     extends StandardParameters {
     /**
-     * Optional. The [IETF BCP-47](https://tools.ietf.org/html/bcp47) language code used to localize support content. If not set, the result will be in default language ('en-US').
+     * Optional. The [IETF BCP-47](https://tools.ietf.org/html/bcp47) language code used to localize support content. If not set, the result will be in default language `en-US`.
      */
     languageCode?: string;
     /**
@@ -24900,7 +25356,7 @@ export namespace content_v2_1 {
     }
 
     /**
-     * Retrieves merchant performance mertrics matching the search query and optionally segmented by selected dimensions.
+     * Retrieves merchant performance metrics matching the search query and optionally segmented by selected dimensions.
      *
      * @param params - Parameters for request
      * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
