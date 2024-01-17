@@ -1172,6 +1172,18 @@ export namespace securitycenter_v1beta1 {
      */
     assignees?: string[] | null;
     /**
+     * The priority of the finding's corresponding case in the external system.
+     */
+    casePriority?: string | null;
+    /**
+     * The SLA of the finding's corresponding case in the external system.
+     */
+    caseSla?: string | null;
+    /**
+     * The link to the finding's corresponding case in the external system.
+     */
+    caseUri?: string | null;
+    /**
      * The time when the case was last updated, as reported by the external system.
      */
     externalSystemUpdateTime?: string | null;
@@ -1187,6 +1199,10 @@ export namespace securitycenter_v1beta1 {
      * The most recent status of the finding's corresponding case, as reported by the external system.
      */
     status?: string | null;
+    /**
+     * Information about the ticket, if any, that is being used to track the resolution of the issue that is identified by this finding.
+     */
+    ticketInfo?: Schema$TicketInfo;
   }
   /**
    * A mute config is a Cloud SCC resource that contains the configuration to mute create/update events of findings.
@@ -2337,6 +2353,35 @@ export namespace securitycenter_v1beta1 {
      * A subset of `TestPermissionsRequest.permissions` that the caller is allowed.
      */
     permissions?: string[] | null;
+  }
+  /**
+   * Information about the ticket, if any, that is being used to track the resolution of the issue that is identified by this finding.
+   */
+  export interface Schema$TicketInfo {
+    /**
+     * The assignee of the ticket in the ticket system.
+     */
+    assignee?: string | null;
+    /**
+     * The description of the ticket in the ticket system.
+     */
+    description?: string | null;
+    /**
+     * The identifier of the ticket in the ticket system.
+     */
+    id?: string | null;
+    /**
+     * The latest status of the ticket, as reported by the ticket system.
+     */
+    status?: string | null;
+    /**
+     * The time when the ticket was last updated, as reported by the ticket system.
+     */
+    updateTime?: string | null;
+    /**
+     * The link to the ticket in the ticket system.
+     */
+    uri?: string | null;
   }
   /**
    * Refers to common vulnerability fields e.g. cve, cvss, cwe etc.
