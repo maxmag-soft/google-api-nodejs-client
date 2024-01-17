@@ -86,6 +86,7 @@ export {beyondcorp_v1} from './apis/beyondcorp/v1';
 export {beyondcorp_v1alpha} from './apis/beyondcorp/v1alpha';
 export {biglake_v1} from './apis/biglake/v1';
 export {bigquery_v2} from './apis/bigquery/v2';
+export {bigqueryconnection_v1} from './apis/bigqueryconnection/v1';
 export {bigqueryconnection_v1beta1} from './apis/bigqueryconnection/v1beta1';
 export {bigquerydatapolicy_v1} from './apis/bigquerydatapolicy/v1';
 export {bigquerydatatransfer_v1} from './apis/bigquerydatatransfer/v1';
