@@ -684,6 +684,10 @@ export namespace connectors_v1 {
      */
     connectionRatelimitWindowSeconds?: string | null;
     /**
+     * Optional. Indicates whether connector is deployed on GKE/CloudRun
+     */
+    deploymentModel?: string | null;
+    /**
      * Output only. HPA autoscaling config.
      */
     hpaConfig?: Schema$HPAConfig;
@@ -819,6 +823,19 @@ export namespace connectors_v1 {
      * Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
      */
     year?: number | null;
+  }
+  /**
+   * Dead Letter configuration details provided by the user.
+   */
+  export interface Schema$DeadLetterConfig {
+    /**
+     * Optional. Project which has the topic given.
+     */
+    projectId?: string | null;
+    /**
+     * Optional. Topic to push events which couldn't be processed.
+     */
+    topic?: string | null;
   }
   /**
    * DenyMaintenancePeriod definition. Maintenance is forbidden within the deny period. The start_date must be less than the end_date.
@@ -1019,6 +1036,10 @@ export namespace connectors_v1 {
      * Auth details for the webhook adapter.
      */
     authConfig?: Schema$AuthConfig;
+    /**
+     * Optional. Dead letter configuration for eventing of a connection.
+     */
+    deadLetterConfig?: Schema$DeadLetterConfig;
     /**
      * Enrichment Enabled.
      */
@@ -7046,6 +7067,10 @@ export namespace connectors_v1 {
   }
   export interface Params$Resource$Projects$Locations$Global$Customconnectors$Delete
     extends StandardParameters {
+    /**
+     * Optional. If set to true, any customConnectorVersion which is a child resource will also be deleted. https://aip.dev/135#cascading-delete
+     */
+    force?: boolean;
     /**
      * Required. Resource name of the form: `projects/{project\}/locations/{location\}/customConnectors/{connector\}`
      */
