@@ -249,7 +249,7 @@ export namespace prod_tt_sasportal_v1alpha1 {
      */
     displayName?: string | null;
     /**
-     * The FCC identifier of the device.
+     * The FCC identifier of the device. Refer to https://www.fcc.gov/oet/ea/fccid for FccID format.
      */
     fccId?: string | null;
     /**
@@ -457,6 +457,19 @@ export namespace prod_tt_sasportal_v1alpha1 {
     lowFrequencyMhz?: number | null;
   }
   /**
+   * Deployment associated with the GCP project. Includes whether SAS analytics has been enabled or not.
+   */
+  export interface Schema$SasPortalGcpProjectDeployment {
+    /**
+     * Deployment associated with the GCP project.
+     */
+    deployment?: Schema$SasPortalDeployment;
+    /**
+     * Whether SAS analytics has been enabled.
+     */
+    hasEnabledAnalytics?: boolean | null;
+  }
+  /**
    * Request for GenerateSecret.
    */
   export interface Schema$SasPortalGenerateSecretRequest {}
@@ -579,13 +592,22 @@ export namespace prod_tt_sasportal_v1alpha1 {
     nextPageToken?: string | null;
   }
   /**
+   * Response for [ListGcpProjectDeployments].
+   */
+  export interface Schema$SasPortalListGcpProjectDeploymentsResponse {
+    /**
+     * Optional. Deployments associated with the GCP project
+     */
+    deployments?: Schema$SasPortalGcpProjectDeployment[];
+  }
+  /**
    * Response for [ListLegacyOrganizations]. [spectrum.sas.portal.v1alpha1.Provisioning.ListLegacyOrganizations].
    */
   export interface Schema$SasPortalListLegacyOrganizationsResponse {
     /**
-     * Optional. IDs of legacy SAS organizations.
+     * Optional. Legacy SAS organizations.
      */
-    organizationIds?: string[] | null;
+    organizations?: Schema$SasPortalOrganization[];
   }
   /**
    * Response for ListNodes.
@@ -720,6 +742,19 @@ export namespace prod_tt_sasportal_v1alpha1 {
      * The normal, successful response of the operation. If the original method returns no data on success, such as `Delete`, the response is `google.protobuf.Empty`. If the original method is standard `Get`/`Create`/`Update`, the response should be the resource. For other methods, the response should have the type `XxxResponse`, where `Xxx` is the original method name. For example, if the original method name is `TakeSnapshot()`, the inferred response type is `TakeSnapshotResponse`.
      */
     response?: {[key: string]: any} | null;
+  }
+  /**
+   * Organization details.
+   */
+  export interface Schema$SasPortalOrganization {
+    /**
+     * Name of organization
+     */
+    displayName?: string | null;
+    /**
+     * Id of organization
+     */
+    id?: string | null;
   }
   /**
    * Defines an access control policy to the resources.
@@ -1169,7 +1204,103 @@ export namespace prod_tt_sasportal_v1alpha1 {
     }
 
     /**
-     * Checks whether account is legacy.
+     * Returns a list of SAS deployments associated with current GCP project. Includes whether SAS analytics has been enabled or not.
+     *
+     * @param params - Parameters for request
+     * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
+     * @param callback - Optional callback that handles the response.
+     * @returns A promise if used with async/await, or void if used with a callback.
+     */
+    listGcpProjectDeployments(
+      params: Params$Resource$Customers$Listgcpprojectdeployments,
+      options: StreamMethodOptions
+    ): GaxiosPromise<Readable>;
+    listGcpProjectDeployments(
+      params?: Params$Resource$Customers$Listgcpprojectdeployments,
+      options?: MethodOptions
+    ): GaxiosPromise<Schema$SasPortalListGcpProjectDeploymentsResponse>;
+    listGcpProjectDeployments(
+      params: Params$Resource$Customers$Listgcpprojectdeployments,
+      options: StreamMethodOptions | BodyResponseCallback<Readable>,
+      callback: BodyResponseCallback<Readable>
+    ): void;
+    listGcpProjectDeployments(
+      params: Params$Resource$Customers$Listgcpprojectdeployments,
+      options:
+        | MethodOptions
+        | BodyResponseCallback<Schema$SasPortalListGcpProjectDeploymentsResponse>,
+      callback: BodyResponseCallback<Schema$SasPortalListGcpProjectDeploymentsResponse>
+    ): void;
+    listGcpProjectDeployments(
+      params: Params$Resource$Customers$Listgcpprojectdeployments,
+      callback: BodyResponseCallback<Schema$SasPortalListGcpProjectDeploymentsResponse>
+    ): void;
+    listGcpProjectDeployments(
+      callback: BodyResponseCallback<Schema$SasPortalListGcpProjectDeploymentsResponse>
+    ): void;
+    listGcpProjectDeployments(
+      paramsOrCallback?:
+        | Params$Resource$Customers$Listgcpprojectdeployments
+        | BodyResponseCallback<Schema$SasPortalListGcpProjectDeploymentsResponse>
+        | BodyResponseCallback<Readable>,
+      optionsOrCallback?:
+        | MethodOptions
+        | StreamMethodOptions
+        | BodyResponseCallback<Schema$SasPortalListGcpProjectDeploymentsResponse>
+        | BodyResponseCallback<Readable>,
+      callback?:
+        | BodyResponseCallback<Schema$SasPortalListGcpProjectDeploymentsResponse>
+        | BodyResponseCallback<Readable>
+    ):
+      | void
+      | GaxiosPromise<Schema$SasPortalListGcpProjectDeploymentsResponse>
+      | GaxiosPromise<Readable> {
+      let params = (paramsOrCallback ||
+        {}) as Params$Resource$Customers$Listgcpprojectdeployments;
+      let options = (optionsOrCallback || {}) as MethodOptions;
+
+      if (typeof paramsOrCallback === 'function') {
+        callback = paramsOrCallback;
+        params = {} as Params$Resource$Customers$Listgcpprojectdeployments;
+        options = {};
+      }
+
+      if (typeof optionsOrCallback === 'function') {
+        callback = optionsOrCallback;
+        options = {};
+      }
+
+      const rootUrl =
+        options.rootUrl || 'https://prod-tt-sasportal.googleapis.com/';
+      const parameters = {
+        options: Object.assign(
+          {
+            url: (
+              rootUrl + '/v1alpha1/customers:listGcpProjectDeployments'
+            ).replace(/([^:]\/)\/+/g, '$1'),
+            method: 'GET',
+          },
+          options
+        ),
+        params,
+        requiredParams: [],
+        pathParams: [],
+        context: this.context,
+      };
+      if (callback) {
+        createAPIRequest<Schema$SasPortalListGcpProjectDeploymentsResponse>(
+          parameters,
+          callback as BodyResponseCallback<unknown>
+        );
+      } else {
+        return createAPIRequest<Schema$SasPortalListGcpProjectDeploymentsResponse>(
+          parameters
+        );
+      }
+    }
+
+    /**
+     * Returns a list of legacy organizations.
      *
      * @param params - Parameters for request
      * @param options - Optionally override request options, such as `url`, `method`, and `encoding`.
@@ -1653,6 +1784,8 @@ export namespace prod_tt_sasportal_v1alpha1 {
      */
     pageToken?: string;
   }
+  export interface Params$Resource$Customers$Listgcpprojectdeployments
+    extends StandardParameters {}
   export interface Params$Resource$Customers$Listlegacyorganizations
     extends StandardParameters {}
   export interface Params$Resource$Customers$Migrateorganization
