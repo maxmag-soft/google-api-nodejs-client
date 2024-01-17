@@ -222,6 +222,19 @@ export namespace dataflow_v1b3 {
     maxNumWorkers?: number | null;
   }
   /**
+   * Exponential buckets where the growth factor between buckets is `2**(2**-scale)`. e.g. for `scale=1` growth factor is `2**(2**(-1))=sqrt(2)`. `n` buckets will have the following boundaries. - 0th: [0, gf) - i in [1, n-1]: [gf^(i), gf^(i+1))
+   */
+  export interface Schema$Base2Exponent {
+    /**
+     * Must be greater than 0.
+     */
+    numberOfBuckets?: number | null;
+    /**
+     * Must be between -3 and 3. This forces the growth factor of the bucket boundaries to be between `2^(1/8)` and `256`.
+     */
+    scale?: number | null;
+  }
+  /**
    * Metadata for a BigQuery connector used by the job.
    */
   export interface Schema$BigQueryIODetails {
@@ -258,6 +271,19 @@ export namespace dataflow_v1b3 {
      * TableId accessed in the connection.
      */
     tableId?: string | null;
+  }
+  /**
+   * `BucketOptions` describes the bucket boundaries used in the histogram.
+   */
+  export interface Schema$BucketOptions {
+    /**
+     * Bucket boundaries grow exponentially.
+     */
+    exponential?: Schema$Base2Exponent;
+    /**
+     * Bucket boundaries grow linearly.
+     */
+    linear?: Schema$Linear;
   }
   /**
    * Description of an interstitial value between transforms in an execution stage.
@@ -575,6 +601,27 @@ export namespace dataflow_v1b3 {
      * VM instance name the data disks mounted to, for example "myproject-1014-104817-4c2-harness-0".
      */
     vmInstance?: string | null;
+  }
+  /**
+   * Summary statistics for a population of values. HistogramValue contains a sequence of buckets and gives a count of values that fall into each bucket. Bucket boundares are defined by a formula and bucket widths are either fixed or exponentially increasing.
+   */
+  export interface Schema$DataflowHistogramValue {
+    /**
+     * Optional. The number of values in each bucket of the histogram, as described in `bucket_options`. `bucket_counts` should contain N values, where N is the number of buckets specified in `bucket_options`. If `bucket_counts` has fewer than N values, the remaining values are assumed to be 0.
+     */
+    bucketCounts?: string[] | null;
+    /**
+     * Describes the bucket boundaries used in the histogram.
+     */
+    bucketOptions?: Schema$BucketOptions;
+    /**
+     * Number of values recorded in this histogram.
+     */
+    count?: string | null;
+    /**
+     * Statistics on the values recorded in the histogram that fall out of the bucket boundaries.
+     */
+    outlierStats?: Schema$OutlierStats;
   }
   /**
    * Configuration options for sampling elements.
@@ -1635,6 +1682,23 @@ export namespace dataflow_v1b3 {
     workItems?: Schema$WorkItem[];
   }
   /**
+   * Linear buckets with the following boundaries for indices in 0 to n-1. - i in [0, n-1]: [start + (i)*width, start + (i+1)*width)
+   */
+  export interface Schema$Linear {
+    /**
+     * Must be greater than 0.
+     */
+    numberOfBuckets?: number | null;
+    /**
+     * Lower bound of the first bucket.
+     */
+    start?: number | null;
+    /**
+     * Distance between bucket boundaries. Must be greater than 0.
+     */
+    width?: number | null;
+  }
+  /**
    * Response to a request to list job messages.
    */
   export interface Schema$ListJobMessagesResponse {
@@ -1803,6 +1867,27 @@ export namespace dataflow_v1b3 {
     updateTime?: string | null;
   }
   /**
+   * The value of a metric along with its name and labels.
+   */
+  export interface Schema$MetricValue {
+    /**
+     * Base name for this metric.
+     */
+    metric?: string | null;
+    /**
+     * Optional. Set of metric labels for this metric.
+     */
+    metricLabels?: {[key: string]: string} | null;
+    /**
+     * Histogram value of this metric.
+     */
+    valueHistogram?: Schema$DataflowHistogramValue;
+    /**
+     * Integer value of this metric.
+     */
+    valueInt64?: string | null;
+  }
+  /**
    * Describes mounted data disk.
    */
   export interface Schema$MountedDataDisk {
@@ -1832,6 +1917,27 @@ export namespace dataflow_v1b3 {
      * Name of the counter.
      */
     name?: string | null;
+  }
+  /**
+   * Statistics for the underflow and overflow bucket.
+   */
+  export interface Schema$OutlierStats {
+    /**
+     * Number of values that are larger than the upper bound of the largest bucket.
+     */
+    overflowCount?: string | null;
+    /**
+     * Mean of values in the overflow bucket.
+     */
+    overflowMean?: number | null;
+    /**
+     * Number of values that are smaller than the lower bound of the smallest bucket.
+     */
+    underflowCount?: string | null;
+    /**
+     * Mean of values in the undeflow bucket.
+     */
+    underflowMean?: number | null;
   }
   /**
    * The packages that must be installed in order for a worker to run the steps of the Cloud Dataflow job that will be assigned to its worker pool. This is the mechanism by which the Cloud Dataflow SDK causes code to be loaded onto the workers. For example, the Cloud Dataflow Java SDK might use this to install jars containing the user's code and all of the various dependencies (libraries, data files, etc.) required in order for that code to run.
@@ -2023,6 +2129,32 @@ export namespace dataflow_v1b3 {
      * The value combining function to invoke.
      */
     valueCombiningFn?: {[key: string]: any} | null;
+  }
+  /**
+   * Metrics for a particular unfused step and namespace. A metric is uniquely identified by the `metrics_namespace`, `original_step`, `metric name` and `metric_labels`.
+   */
+  export interface Schema$PerStepNamespaceMetrics {
+    /**
+     * The namespace of these metrics on the worker.
+     */
+    metricsNamespace?: string | null;
+    /**
+     * Optional. Metrics that are recorded for this namespace and unfused step.
+     */
+    metricValues?: Schema$MetricValue[];
+    /**
+     * The original system name of the unfused step that these metrics are reported from.
+     */
+    originalStep?: string | null;
+  }
+  /**
+   * Per worker metrics.
+   */
+  export interface Schema$PerWorkerMetrics {
+    /**
+     * Optional. Metrics for a particular unfused step and namespace.
+     */
+    perStepNamespaceMetrics?: Schema$PerStepNamespaceMetrics[];
   }
   /**
    * A descriptive representation of submitted pipeline as well as the executed form. This data is provided by the Dataflow service for ease of visualizing the pipeline and interpreting Dataflow provided metrics.
@@ -3485,6 +3617,10 @@ export namespace dataflow_v1b3 {
      * Labels are used to group WorkerMessages. For example, a worker_message about a particular container might have the labels: { "JOB_ID": "2015-04-22", "WORKER_ID": "wordcount-vm-2015…" "CONTAINER_TYPE": "worker", "CONTAINER_ID": "ac1234def"\} Label tags typically correspond to Label enum values. However, for ease of development other strings can be used as tags. LABEL_UNSPECIFIED should not be used here.
      */
     labels?: {[key: string]: string} | null;
+    /**
+     * System defined metrics for this worker.
+     */
+    perWorkerMetrics?: Schema$PerWorkerMetrics;
     /**
      * Contains per-user worker telemetry used in streaming autoscaling.
      */
