@@ -150,7 +150,7 @@ export namespace recaptchaenterprise_v1 {
      */
     latestVerificationResult?: string | null;
     /**
-     * Username of the account that is being verified. Deprecated. Customers should now provide the hashed account ID field in Event.
+     * Username of the account that is being verified. Deprecated. Customers should now provide the `account_id` field in `event.user_info`.
      */
     username?: string | null;
   }
